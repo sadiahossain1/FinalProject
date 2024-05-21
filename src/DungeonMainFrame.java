@@ -1,6 +1,5 @@
 import javax.swing.*;
 public class DungeonMainFrame  {
-    private DungeonGraphicsPanel panel;
     public DungeonMainFrame(String name) {
         JFrame frame = new JFrame("Dungeon Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

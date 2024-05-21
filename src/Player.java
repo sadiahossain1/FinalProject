@@ -112,7 +112,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Player {
-    private final double MOVE_AMT = 0.8;
+    private final double MOVE_AMT = 1.2;
     private BufferedImage right;
     private BufferedImage left;
     private boolean facingRight;
@@ -124,8 +124,8 @@ public class Player {
     public Player(String leftImg, String rightImg, String name) {
         this.name = name;
         facingRight = true;
-        xCoord = 50; // starting position is (50, 435), right on top of ground
-        yCoord = 435;
+        xCoord = 100; // starting position is (50, 435), right on top of ground
+        yCoord = 400;
         score = 0;
         try {
             left = ImageIO.read(new File(leftImg));
