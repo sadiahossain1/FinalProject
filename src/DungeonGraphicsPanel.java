@@ -38,18 +38,19 @@ public class DungeonGraphicsPanel extends JPanel implements KeyListener, ActionL
         this.setFocusable(true); // this line of code + one below makes this panel active for keylistener events
         this.requestFocusInWindow();
         this.addKeyListener(this);
+        this.setFocusTraversalKeysEnabled(false);
 
         // Initialize the timer to trigger action every 1 to 5 seconds
-        timer = new Timer(1000 + random.nextInt(2000), new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Randomize the diamond position
-                diamondX = random.nextInt(getWidth() - diamond.getWidth());
-                diamondY = random.nextInt(getHeight() - diamond.getHeight());
-                repaint(); // Repaint the panel to show the diamond
-            }
-        });
-        timer.start(); // Start the timer
+//        timer = new Timer(1000 + random.nextInt(2000), new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                // Randomize the diamond position
+//                diamondX = random.nextInt(getWidth() - diamond.getWidth());
+//                diamondY = random.nextInt(getHeight() - diamond.getHeight());
+//                repaint(); // Repaint the panel to show the diamond
+//            }
+//        });
+//        timer.start(); // Start the timer
     }
 
     @Override
@@ -63,6 +64,17 @@ public class DungeonGraphicsPanel extends JPanel implements KeyListener, ActionL
         g.setColor(Color.WHITE);
         g.setFont(new Font("Courier New", Font.BOLD, 22));
         g.drawString(player.getName() + "'s Score: " + player.getScore(), 20, 40);
+
+        timer = new Timer(2000 + random.nextInt(5000), new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Randomize the diamond position
+                diamondX = random.nextInt(getWidth() - diamond.getWidth());
+                diamondY = random.nextInt(getHeight() - diamond.getHeight());
+                repaint(); // Repaint the panel to show the diamond
+            }
+        });
+        timer.start(); // Start the timer
 
         // player moves left (A)
         if (pressedKeys[65]) {
