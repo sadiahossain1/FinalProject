@@ -1,13 +1,7 @@
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -33,24 +27,16 @@ public class DungeonGraphicsPanel extends JPanel implements KeyListener, ActionL
         } catch (IOException e) {
             System.out.println("Error loading images: " + e.getMessage());
         }
-        player = new Player("src/ghostleft.png", "src/dungeondoor.png", name);
-        pressedKeys = new boolean[128];
-        this.setFocusable(true); // this line of code + one below makes this panel active for keylistener events
+        player = new Player("src/ghostleft.png", "src/ghostright.png", name, 50, 250);
+
+        this.setFocusable(true); // Makes this panel active for keylistener events
         this.requestFocusInWindow();
         this.addKeyListener(this);
         this.setFocusTraversalKeysEnabled(false);
 
-        // Initialize the timer to trigger action every 1 to 5 seconds
-//        timer = new Timer(1000 + random.nextInt(2000), new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                // Randomize the diamond position
-//                diamondX = random.nextInt(getWidth() - diamond.getWidth());
-//                diamondY = random.nextInt(getHeight() - diamond.getHeight());
-//                repaint(); // Repaint the panel to show the diamond
-//            }
-//        });
-//        timer.start(); // Start the timer
+        // Initialize the timer to trigger action every 2 to 7 seconds
+        timer = new Timer(2000 + random.nextInt(5000), this);
+        timer.start();
     }
 
     @Override
@@ -65,63 +51,58 @@ public class DungeonGraphicsPanel extends JPanel implements KeyListener, ActionL
         g.setFont(new Font("Courier New", Font.BOLD, 22));
         g.drawString(player.getName() + "'s Score: " + player.getScore(), 20, 40);
 
-        timer = new Timer(2000 + random.nextInt(5000), new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Randomize the diamond position
-                diamondX = random.nextInt(getWidth() - diamond.getWidth());
-                diamondY = random.nextInt(getHeight() - diamond.getHeight());
-                repaint(); // Repaint the panel to show the diamond
-            }
-        });
-        timer.start(); // Start the timer
-
-        // player moves left (A)
-        if (pressedKeys[65]) {
+        // Player movement handling
+        if (pressedKeys[65]) { // A
             player.faceLeft();
             player.moveLeft();
         }
-
-        // player moves right (D)
-        if (pressedKeys[68]) {
+        if (pressedKeys[68]) { // D
             player.faceRight();
             player.moveRight();
-
         }
-
-        // player moves up (W)
-        if (pressedKeys[87]) {
+        if (pressedKeys[87]) { // W
             player.moveUp();
         }
-
-        // player moves down (S)
-        if (pressedKeys[83]) {
+        if (pressedKeys[83]) { // S
             player.moveDown();
         }
-    }
-    public void keyTyped(KeyEvent e) { } // unimplemented
-    public void keyPressed(KeyEvent e) {
-        // see this for all keycodes: https://stackoverflow.com/questions/15313469/java-keyboard-keycodes-list
-        // A = 65, D = 68, S = 83, W = 87, left = 37, up = 38, right = 39, down = 40, space = 32, enter = 10
-        int key = e.getKeyCode();
-        pressedKeys[key] = true;
+
+        // Check for collision with diamond
+        if (diamondX != -100 && diamondY != -100 && player.getBounds().intersects(new Rectangle(diamondX, diamondY, diamond.getWidth(), diamond.getHeight()))) {
+            player.incrementScore();
+            diamondX = -100; // Move diamond off-screen after collection
+            diamondY = -100;
+        }
+
+        // Repaint the panel to reflect player movement
+        repaint();
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Randomize the diamond position
+        diamondX = random.nextInt(getWidth() - diamond.getWidth());
+        diamondY = random.nextInt(getHeight() - diamond.getHeight());
+        repaint(); // Repaint the panel to show the diamond
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    } // Unimplemented
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key >= 0 && key < pressedKeys.length) {
+            pressedKeys[key] = true;
+        }
+    }
+
+    @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        pressedKeys[key] = false;
+        if (key >= 0 && key < pressedKeys.length) {
+            pressedKeys[key] = false;
+        }
     }
-
-    // ----- MouseListener interface methods -----
-//    public void mouseClicked(MouseEvent e) { }  // unimplemented; if you move your mouse while clicking,
-//    // this method isn't called, so mouseReleased is best
-//
-//    public void mousePressed(MouseEvent e) { } // unimplemented
-//
-//    public void mouseEntered(MouseEvent e) { } // unimplemented
-//
-//    public void mouseExited(MouseEvent e) { } // unimplemented
-    public void actionPerformed(ActionEvent e) {
-    }
-
 }

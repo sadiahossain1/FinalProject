@@ -5,26 +5,26 @@ import java.io.File;
 import java.io.IOException;
 
 public class Player {
-    private final double MOVE_AMT = 1.2;
-    private BufferedImage right;
-    private BufferedImage left;
+    private static final double MOVE_AMT = 0.1;
+    private BufferedImage rightImage;
+    private BufferedImage leftImage;
     private boolean facingRight;
     private double xCoord;
     private double yCoord;
     private int score;
     private String name;
 
-    public Player(String leftImg, String rightImg, String name) {
-        this.name = name;
-        facingRight = true;
-        xCoord = 100; // starting position is (50, 435), right on top of ground
-        yCoord = 400;
-        score = 0;
+    public Player(String leftImgPath, String rightImgPath, String playerName, int xCoord, int yCoord) {
+        this.name = playerName;
+        this.facingRight = true;
+        this.xCoord = xCoord; // starting position
+        this.yCoord = yCoord;
+        this.score = 0;
         try {
-            left = ImageIO.read(new File(leftImg));
-            right = ImageIO.read(new File(rightImg));
+            leftImage = ImageIO.read(new File(leftImgPath));
+            rightImage = ImageIO.read(new File(rightImgPath));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading player images: " + e.getMessage());
         }
     }
 
@@ -53,54 +53,48 @@ public class Player {
     }
 
     public void moveRight() {
-        if (xCoord + MOVE_AMT <= 920) {
+        if (xCoord + MOVE_AMT <= 768) { // assuming 920 is the right boundary
             xCoord += MOVE_AMT;
         }
     }
 
     public void moveLeft() {
-        if (xCoord - MOVE_AMT >= 0) {
+        if (xCoord - MOVE_AMT >= 0) { // assuming 0 is the left boundary
             xCoord -= MOVE_AMT;
         }
     }
 
     public void moveUp() {
-        if (yCoord - MOVE_AMT >= 0) {
+        if (yCoord - MOVE_AMT >= 0) { // assuming 0 is the top boundary
             yCoord -= MOVE_AMT;
         }
     }
 
     public void moveDown() {
-        if (yCoord + MOVE_AMT <= 435) {
+        if (yCoord + MOVE_AMT <= 512) { // assuming 435 is the bottom boundary
             yCoord += MOVE_AMT;
         }
     }
 
-    public void turn() {
-        if (facingRight) {
-            faceLeft();
-        } else {
-            faceRight();
-        }
-    }
-
-    public void collectDiamond() {
+    public void incrementScore() {
         score++;
     }
 
     public BufferedImage getPlayerImage() {
         if (facingRight) {
-            return right;
+            return rightImage != null ? rightImage : leftImage; // fallback to left image if right image is null
         } else {
-            return left;
+            return leftImage != null ? leftImage : rightImage; // fallback to right image if left image is null
         }
     }
 
-    // we use a "bounding Rectangle" for detecting collision
-    public Rectangle playerRect() {
-        int imageHeight = getPlayerImage().getHeight();
-        int imageWidth = getPlayerImage().getWidth();
-        Rectangle rect = new Rectangle((int) xCoord, (int) yCoord, imageWidth, imageHeight);
-        return rect;
+    // Method for collision detection
+    public Rectangle getBounds() {
+        BufferedImage currentImage = getPlayerImage();
+        if (currentImage != null) {
+            return new Rectangle((int) xCoord, (int) yCoord, currentImage.getWidth(), currentImage.getHeight());
+        } else {
+            return new Rectangle((int) xCoord, (int) yCoord, 0, 0);
+        }
     }
 }
