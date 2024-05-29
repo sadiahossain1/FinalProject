@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Player {
-    private static final double MOVE_AMT = 0.1;
+    private static final double MOVE_AMT = 0.3;
     private BufferedImage rightImage;
     private BufferedImage leftImage;
     private boolean facingRight;

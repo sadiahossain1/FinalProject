@@ -17,6 +17,7 @@ public class DungeonGraphicsPanel extends JPanel implements KeyListener, ActionL
     private int diamondY = -100; // Initial off-screen position
     private Random random;
     private Player player;
+    private boolean isGameWon;
 
     public DungeonGraphicsPanel(String name) {
         random = new Random();
@@ -28,7 +29,7 @@ public class DungeonGraphicsPanel extends JPanel implements KeyListener, ActionL
             System.out.println("Error loading images: " + e.getMessage());
         }
         player = new Player("src/ghostleft.png", "src/ghostright.png", name, 50, 250);
-
+        isGameWon = false;
         this.setFocusable(true); // Makes this panel active for keylistener events
         this.requestFocusInWindow();
         this.addKeyListener(this);
@@ -51,6 +52,13 @@ public class DungeonGraphicsPanel extends JPanel implements KeyListener, ActionL
         g.setFont(new Font("Courier New", Font.BOLD, 22));
         g.drawString(player.getName() + "'s Score: " + player.getScore(), 20, 40);
 
+//        if (player.getScore() == 5) {
+//            isGameWon = true;
+//        }
+//        if (isGameWon) {
+//            g.drawString("YOU WIN!", 350, 250);
+//        }
+
         // Player movement handling
         if (pressedKeys[65]) { // A
             player.faceLeft();
@@ -68,15 +76,26 @@ public class DungeonGraphicsPanel extends JPanel implements KeyListener, ActionL
         }
 
         // Check for collision with diamond
-        if (diamondX != -100 && diamondY != -100 && player.getBounds().intersects(new Rectangle(diamondX, diamondY, diamond.getWidth(), diamond.getHeight()))) {
+        if (diamondX != -100 && diamondY != -100 && player.getBounds().intersects(new Rectangle(diamondX, diamondY, diamond.getWidth(), diamond.getHeight())) && !isGameWon) {
             player.incrementScore();
             diamondX = -100; // Move diamond off-screen after collection
             diamondY = -100;
         }
 
+        if (player.getScore() == 50) {
+            isGameWon = true;
+        }
+        if (isGameWon) {
+            g.drawString("YOU WIN!", 350, 250);
+            diamondX = -100;
+            diamondY = -100;
+        }
+
         // Repaint the panel to reflect player movement
         repaint();
+
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -93,7 +112,7 @@ public class DungeonGraphicsPanel extends JPanel implements KeyListener, ActionL
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        if (key >= 0 && key < pressedKeys.length) {
+        if (key >= 0 && key < pressedKeys.length && !isGameWon) {
             pressedKeys[key] = true;
         }
     }
@@ -101,7 +120,7 @@ public class DungeonGraphicsPanel extends JPanel implements KeyListener, ActionL
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        if (key >= 0 && key < pressedKeys.length) {
+        if (key >= 0 && key < pressedKeys.length && !isGameWon) {
             pressedKeys[key] = false;
         }
     }
