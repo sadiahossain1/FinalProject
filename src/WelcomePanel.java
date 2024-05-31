@@ -73,7 +73,10 @@ public class WelcomePanel extends JPanel implements ActionListener {
                 String playerName = textField.getText();
                 PongMainFrame p = new PongMainFrame(playerName);
                 enclosingFrame.setVisible(false);
-            } else {
+            } if (button == salGame){
+                SalMainFrame s = new SalMainFrame();
+                enclosingFrame.setVisible(false);
+            }else {
                 textField.setText("");
             }
         }
