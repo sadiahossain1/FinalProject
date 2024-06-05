@@ -1,21 +1,47 @@
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Arrays;
-public class SalGraphicsPanel {
-    static Map<Integer, Integer> snake = new HashMap<>();
-    static Map<Integer, Integer> ladder = new HashMap<>();
+import javax.swing.*;
+import java.awt.*;
+
+public class  SalGraphicsPanel extends JPanel {
+    private final int[][] grid = {
+            {0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
+            {1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+            {0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
+            {1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+            {0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
+            {1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+            {0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
+            {1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+            {0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
+            {1, 0, 1, 0, 1, 0, 1, 0, 1, 0}
+    };
+    private int width = 65;
+    private int height = 70;
+    private int count = 100;
 
     public SalGraphicsPanel() {
-        snake.put(99, 54);
-        snake.put(70, 55);
-        snake.put(52, 42);
-        snake.put(25, 2);
-        snake.put(95, 72);
+    }
 
-        ladder.put(6, 25);
-        ladder.put(11, 40);
-        ladder.put(60, 85);
-        ladder.put(46, 90);
-        ladder.put(17, 69);
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        for (int r = 0; r < grid.length; r++) {
+            for (int c = 0; c < grid[0].length; c++) {
+                if (grid[r][c] == 0) {
+                    g.setColor(Color.BLUE);
+                    g.fillRect(c * width, r * height, width, height);
+                    g.setColor(Color.WHITE);
+                    g.setFont(new Font("Courier New", Font.BOLD, 18));
+                    g.drawString(count + "", c * width, r * height);
+                    count--;
+                }
+                if (grid[r][c] == 1) {
+                    g.setColor(Color.black);
+                    g.fillRect(c * width, r * height, width, height);
+                    g.setColor(Color.WHITE);
+                    g.setFont(new Font("Courier New", Font.BOLD, 18));
+                    g.drawString(count + "", c*width, r*height);
+                    count--;
+                }
+            }
+        }
     }
 }
