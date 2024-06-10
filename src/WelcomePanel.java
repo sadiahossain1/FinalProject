@@ -13,10 +13,8 @@ public class WelcomePanel extends JPanel implements ActionListener {
     private JButton clearButton;
     private JFrame enclosingFrame;
     private JButton dungeonGame;
-    private JButton salGame;
     private JButton simplePong;
     private BufferedImage door;
-    private BufferedImage snakesAndLadders;
     private BufferedImage pingPong;
 
 
@@ -24,7 +22,6 @@ public class WelcomePanel extends JPanel implements ActionListener {
         enclosingFrame = frame;
         try {
             door = ImageIO.read(new File("src/dungeondoor.png"));
-            snakesAndLadders = ImageIO.read(new File("src/snakesandladders.png"));
             pingPong = ImageIO.read(new File ("src/pingpong.png"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -32,33 +29,29 @@ public class WelcomePanel extends JPanel implements ActionListener {
         textField = new JTextField(10);
         clearButton = new JButton("Clear");
         dungeonGame = new JButton("Dungeon Game");
-        salGame = new JButton("Snakes and Ladders");
         simplePong = new JButton("Simple Pong");
         add(textField);  // textField doesn't need a listener since nothing needs to happen when we type in text
         add(clearButton);
         add(dungeonGame);
-        add(salGame);
         add(simplePong);
         clearButton.addActionListener(this);
         dungeonGame.addActionListener(this);
-        salGame.addActionListener(this);
         simplePong.addActionListener(this);
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        this.setBackground(Color.GRAY);
         g.setFont(new Font("Arial", Font.BOLD, 22));
         g.setColor(Color.BLACK);
-        g.drawString("Please enter your name:", 150, 50);
-        g.drawImage(door, 70, 150, null);
-        g.drawImage(snakesAndLadders, 230, 150, null);
-        g.drawImage(pingPong, 400, 150, null);
+        g.drawString("Please enter your name:", 130, 50);
+        g.drawImage(door, 130, 150, null);
+        g.drawImage(pingPong, 330, 150, null);
         textField.setLocation(210, 65);
         clearButton.setLocation(235, 100);
-        dungeonGame.setLocation(50, 270);
-        salGame.setLocation(210, 270);
-        simplePong.setLocation(400, 270);
+        dungeonGame.setLocation(100, 270);
+        simplePong.setLocation(320, 270);
     }
 
     // ACTIONLISTENER INTERFACE METHODS
@@ -72,9 +65,6 @@ public class WelcomePanel extends JPanel implements ActionListener {
             } if (button == simplePong){
                 String playerName = textField.getText();
                 PongMainFrame p = new PongMainFrame(playerName);
-                enclosingFrame.setVisible(false);
-            } if (button == salGame){
-                SalMainFrame s = new SalMainFrame();
                 enclosingFrame.setVisible(false);
             }else {
                 textField.setText("");
