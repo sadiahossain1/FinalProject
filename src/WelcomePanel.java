@@ -14,6 +14,7 @@ public class WelcomePanel extends JPanel implements ActionListener {
     private JFrame enclosingFrame;
     private JButton dungeonGame;
     private JButton simplePong;
+    private JButton pongTwo;
     private BufferedImage door;
     private BufferedImage pingPong;
 
@@ -30,13 +31,16 @@ public class WelcomePanel extends JPanel implements ActionListener {
         clearButton = new JButton("Clear");
         dungeonGame = new JButton("Dungeon Game");
         simplePong = new JButton("Simple Pong");
+        pongTwo = new JButton("Ping Pong");
         add(textField);  // textField doesn't need a listener since nothing needs to happen when we type in text
         add(clearButton);
         add(dungeonGame);
         add(simplePong);
+        add(pongTwo);
         clearButton.addActionListener(this);
         dungeonGame.addActionListener(this);
         simplePong.addActionListener(this);
+        pongTwo.addActionListener(this);
     }
 
     @Override
@@ -52,6 +56,7 @@ public class WelcomePanel extends JPanel implements ActionListener {
         clearButton.setLocation(235, 100);
         dungeonGame.setLocation(100, 270);
         simplePong.setLocation(320, 270);
+        pongTwo.setLocation(400, 270);
     }
 
     // ACTIONLISTENER INTERFACE METHODS
@@ -66,7 +71,12 @@ public class WelcomePanel extends JPanel implements ActionListener {
                 String playerName = textField.getText();
                 PongMainFrame p = new PongMainFrame(playerName);
                 enclosingFrame.setVisible(false);
-            }else {
+            } if (button == pongTwo) {
+                String playerName = textField.getText();
+                PingPongMainFrame p = new PingPongMainFrame(playerName);
+                enclosingFrame.setVisible(false);
+            }
+            else {
                 textField.setText("");
             }
         }
