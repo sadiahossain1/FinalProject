@@ -52,13 +52,6 @@ public class DungeonGraphicsPanel extends JPanel implements KeyListener, ActionL
         g.setFont(new Font("Courier New", Font.BOLD, 22));
         g.drawString(player.getName() + "'s Score: " + player.getScore(), 20, 40);
 
-//        if (player.getScore() == 5) {
-//            isGameWon = true;
-//        }
-//        if (isGameWon) {
-//            g.drawString("YOU WIN!", 350, 250);
-//        }
-
         // Player movement handling
         if (pressedKeys[65]) { // A
             player.faceLeft();

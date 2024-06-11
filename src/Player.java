@@ -9,7 +9,7 @@ public class Player {
     private BufferedImage rightImage;
     private BufferedImage leftImage;
     private boolean facingRight;
-    private double xCoord;
+    public double xCoord;
     private double yCoord;
     private int score;
     private String name;
